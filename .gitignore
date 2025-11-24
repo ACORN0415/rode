@@ -1,0 +1,13 @@
+build
+.vscode
+data
+temp_*
+ae_result
+*.mtx
+testset
+RoDe_SPMM_streamk*
+dataset
+dataSet
+ASpT*
+random*
+ramdom*
