@@ -33,7 +33,6 @@ __device__ RoDeWorkQueue __rode_wq;
 __device__ int   __rode_wave_threshold     = 3;
 __device__ int   __rode_force_streamk      = 0;
 __device__ int   __rode_avail_sms          = 0;
-__device__ float __rode_dp_eff_threshold   = 0.92f;
 __device__ int   __rode_min_iters_per_sk   = 2;
 __device__ int   __rode_est_iters_per_tile = 4;
 
@@ -578,7 +577,6 @@ RoDeComputeKernel2(int m,int k,int n,
 
   const int total_tiles = __rode_wq.total_tiles;
   const int   waves  = (total_tiles + sm - 1) / sm;
-  const float dp_eff = float(total_tiles) / float(waves * sm);
   const int tiles_n_calc = (n + kBlockItemsX - 1) / kBlockItemsX;
 
 #if RODE_FORCE_USE_STREAMK
@@ -588,8 +586,7 @@ RoDeComputeKernel2(int m,int k,int n,
       (tiles_n_calc > 1) &&
       ( (__rode_force_streamk != 0) ||
         (waves >= __rode_wave_threshold) ||
-        (waves == 2 && __rode_est_iters_per_tile >= __rode_min_iters_per_sk) ||
-        (dp_eff < __rode_dp_eff_threshold) );
+        (waves == 2 && __rode_est_iters_per_tile >= __rode_min_iters_per_sk) );
 #endif
 
   if (1) {
